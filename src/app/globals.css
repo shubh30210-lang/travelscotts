@@ -84,7 +84,7 @@ details p { margin-top: 10px; color: #555; line-height: 1.6; }
 .wa-link { background: #25D366; color: white; }
 footer { background:#001d45; color:white; text-align:center; padding:20px; }
 
-/* FLOATING WHATSAPP BUTTON (Tumhara Screenshot Jaisa) */
+/* FLOATING WHATSAPP BUTTON */
 .float-wa {
   position: fixed;
   width: 60px;
@@ -106,11 +106,18 @@ footer { background:#001d45; color:white; text-align:center; padding:20px; }
 }
 .float-wa:hover { transform: scale(1.1); box-shadow: 0 0 25px rgba(37,211,102, 0.8); }
 
-/* MOBILE RESPONSIVE TWEAKS */
+/* --- MASTER MOBILE RESPONSIVE TWEAKS & GLOBE FIXES --- */
 @media(max-width:768px){ 
+  /* Navbar & Buttons */
   .desktop-nav { display: none; }
   .hamburger-btn { display: block; }
-  .search-box { flex-direction: column; width: 90%; } 
-  .search-box input { width: 100%; }
   .float-wa { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 28px; } 
+  
+  /* Search Box Fix (Globe ke upar) */
+  .search-box { flex-direction: column; width: 90%; position: relative; z-index: 10 !important; } 
+  .search-box input { width: 100%; }
+  
+  /* Globe Mobile Screen Overflow & Swipe Fix */
+  #globeViz { height: 350px !important; width: 100% !important; overflow: hidden; margin-top: 10px; }
+  #globeViz > div, #globeViz canvas { height: 350px !important; pointer-events: none !important; }
 }

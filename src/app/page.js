@@ -37,12 +37,12 @@ export default function Home() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isResetPassword, setIsResetPassword] = useState(false);
 
-  // NAYA: Upload System States
+  // Upload System States
   const [isUploadOpen, setIsUploadOpen] = useState(false);
   const [selectedCountryForVisa, setSelectedCountryForVisa] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
 
-  // NAYA: Admin System States
+  // Admin System States
   const [isAdminView, setIsAdminView] = useState(false);
   const [applications, setApplications] = useState([]);
 
@@ -70,13 +70,23 @@ export default function Home() {
     setApplications(apps);
   };
 
+// Fix #1: Naya dynamic Globe initialization JavaScript logic
   const initGlobe = () => {
     if (globeInstance.current || !globeContainerRef.current || !window.Globe || isAdminView) return;
     try {
-      const world = window.Globe()(globeContainerRef.current)
+      const container = globeContainerRef.current;
+      
+      // Calculate responsive dimensions: desktop pe 650px, mobile pe 350px
+      const isMobile = window.innerWidth <= 768;
+      const initialHeight = isMobile ? 350 : 650;
+      
+      const world = window.Globe()(container)
         .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
         .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
         .backgroundColor('rgba(0,0,0,0)')
+        // Master Fix: Ensure Three.js canvas doesn't squish
+        .width(container.offsetWidth)
+        .height(initialHeight)
         .htmlElementsData([])
         .htmlElement(d => {
           const el = document.createElement('div');
@@ -90,6 +100,18 @@ export default function Home() {
 
       world.controls().autoRotate = true;
       world.controls().autoRotateSpeed = 1.0;
+      
+      // Fix: Desktop par scroll trap na ho, par globe rotation controls chalien
+      if (!isMobile) {
+          world.controls().enableZoom = true;
+          world.controls().enablePan = false;
+      } else {
+          // Mobile swipe fix from before (disable touch interactions)
+          world.controls().enableZoom = false;
+          world.controls().enablePan = false;
+          world.controls().autoRotateSpeed = 1.5; // thoda tez rotate
+      }
+      
       globeInstance.current = world;
     } catch (error) {
       console.error("Globe init failed:", error);
@@ -170,13 +192,11 @@ export default function Home() {
     }
   };
 
-  // NAYA: Handle Document Upload
   const handleFileUploadSubmit = async (e) => {
     e.preventDefault();
     const file = e.target.document.files[0];
     if (!file) return;
 
-    // Firebase Storage Reference
     const fileRef = ref(storage, `applications/${currentUser.uid}_${file.name}`);
     const uploadTask = uploadBytesResumable(fileRef, file);
 
@@ -187,7 +207,6 @@ export default function Home() {
       }, 
       (error) => { alert("Upload failed: " + error.message); }, 
       async () => {
-        // Success
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         const success = await submitVisaApplication(currentUser.email, selectedCountryForVisa, downloadURL);
         if(success) {
@@ -278,35 +297,66 @@ export default function Home() {
       <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
       </head>
+
       <Script src="https://unpkg.com/three" strategy="beforeInteractive" />
       <Script src="https://unpkg.com/globe.gl" strategy="beforeInteractive" />
       
-      <a href="https://wa.me/919664955721" target="_blank" rel="noreferrer" className="float-wa"><i className="fa-brands fa-whatsapp"></i></a>
+      <a href="https://wa.me/919664955721" target="_blank" rel="noreferrer" className="float-wa">
+        <i className="fa-brands fa-whatsapp"></i>
+      </a>
 
       <header>
-        <div className="logo-area"><img src="/logo.jpeg" alt="Travelscotts Logo" /></div>
+        <div className="logo-area">
+            <img src="/logo.jpeg" alt="Travelscotts Logo" />
+        </div>
+        
         <nav className="desktop-nav">
           <ul>
             <li><a href="#">Home</a></li>
             <li><a href="#services">Services</a></li>
             <li><a href="#globe-section">Visa Check</a></li>
+            <li><a href="#faq">FAQ</a></li>
             <li><a href="#reviews">Reviews</a></li>
             
-            {/* ADMIN BUTTON (Only visible to Admin Email) */}
             {currentUser?.email === ADMIN_EMAIL && (
               <li><button className="login-btn" style={{background: "#25D366", color: "white"}} onClick={() => { loadAdminData(); setIsAdminView(true); }}>Admin Panel</button></li>
             )}
-            
+
             <li>
               {currentUser ? (
-                <button className="login-btn" style={{background: "#ff4d4d", color: "white"}} onClick={handleLogout}>Logout ({currentUser.email.split('@')[0]})</button>
+                <button className="login-btn" style={{background: "#ff4d4d", color: "white"}} onClick={handleLogout}>
+                  Logout ({currentUser.email.split('@')[0]})
+                </button>
               ) : (
                 <button className="login-btn" onClick={() => { setIsLoginOpen(true); setIsResetPassword(false); }}>Login / Register</button>
               )}
             </li>
           </ul>
         </nav>
-        <button className="hamburger-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}><i className={`fa-solid ${isMobileMenuOpen ? 'fa-xmark' : 'fa-bars'}`}></i></button>
+
+        {/* Hamburger Button */}
+        <button className="hamburger-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          <i className={`fa-solid ${isMobileMenuOpen ? 'fa-xmark' : 'fa-bars'}`}></i>
+        </button>
+
+        {/* Mobile Dropdown Menu */}
+        <div className="mobile-menu" style={{ display: isMobileMenuOpen ? 'flex' : 'none' }}>
+          <a href="#" onClick={() => setIsMobileMenuOpen(false)}>Home</a>
+          <a href="#services" onClick={() => setIsMobileMenuOpen(false)}>Services</a>
+          <a href="#globe-section" onClick={() => setIsMobileMenuOpen(false)}>Visa Check</a>
+          <a href="#faq" onClick={() => setIsMobileMenuOpen(false)}>FAQ</a>
+          <a href="#reviews" onClick={() => setIsMobileMenuOpen(false)}>Reviews</a>
+          
+          {currentUser?.email === ADMIN_EMAIL && (
+            <button className="login-btn" style={{width: '200px', margin: '10px auto', background: "#25D366", color: "white"}} onClick={() => { loadAdminData(); setIsAdminView(true); setIsMobileMenuOpen(false); }}>Admin Panel</button>
+          )}
+
+          {currentUser ? (
+            <button className="login-btn" style={{width: '200px', margin: '10px auto', background: "#ff4d4d", color: "white"}} onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}>Logout</button>
+          ) : (
+            <button className="login-btn" style={{width: '200px', margin: '10px auto'}} onClick={() => { setIsLoginOpen(true); setIsResetPassword(false); setIsMobileMenuOpen(false); }}>Login / Register</button>
+          )}
+        </div>
       </header>
 
       {/* LOGIN MODAL */}
@@ -334,7 +384,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* NAYA: DOCUMENT UPLOAD MODAL */}
+      {/* DOCUMENT UPLOAD MODAL */}
       <div className="modal" style={{ display: isUploadOpen ? 'flex' : 'none' }}>
         <div className="modal-content">
           <span className="close-btn" onClick={() => setIsUploadOpen(false)}>&times;</span>
@@ -381,11 +431,16 @@ export default function Home() {
       <section id="globe-section">
         <h2 className="section-title white-text" style={{marginBottom: "10px"}}>Search Your Destination</h2>
         <p style={{color: "white", marginBottom: "20px"}}>Enter a country to spin the globe & see visa requirements</p>
-        <div className="search-box">
-            <input type="text" placeholder="e.g. Canada, UK, Dubai" value={globeInput} onChange={(e)=>setGlobeInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleGlobeSearch()} />
-            <button onClick={handleGlobeSearch}>Find & Pin</button>
-        </div>
-        <div ref={globeContainerRef} id="globeViz"></div>
+        {/* Search Box Fix: Hamesha Globe se alag dikhe desktop/mobile par */}
+      <div className="search-box-wrapper" style={{ zIndex: 10, position: 'relative', marginBottom: '20px' }}>
+          <div className="search-box" style={{display: 'flex', gap: '10px', justifyContent: 'center'}}>
+              <input type="text" placeholder="e.g. Canada, UK, Dubai" value={globeInput} onChange={(e)=>setGlobeInput(e.target.value)} onKeyPress={(e) => e.key === 'Enter' && handleGlobeSearch()} />
+              <button onClick={handleGlobeSearch}>Find & Pin</button>
+          </div>
+      </div>
+
+      {/* Fix #2: Dedicated container for JS logic to control height */}
+      <div ref={globeContainerRef} id="globeViz" style={{ width: '100%', position: 'relative' }}></div>
 
         {searchedVisa && (
           <div className="visa-result-container">
