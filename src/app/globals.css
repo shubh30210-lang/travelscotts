@@ -1,0 +1,116 @@
+* { margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif; }
+html { scroll-behavior:smooth; }
+body { background:#f5f7fb; }
+
+/* HEADER & MOBILE MENU */
+header { background:#002f6c; padding:15px 5%; display:flex; justify-content:space-between; align-items:center; position: sticky; top: 0; z-index: 100; }
+.logo-area img { width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid #FFD700; }
+.desktop-nav ul { display:flex; gap:20px; list-style:none; align-items: center; }
+.desktop-nav a { color:white; text-decoration:none; font-weight:bold; font-size: 14px;}
+.login-btn { background: #FFD700; color: #002f6c; padding: 8px 15px; border-radius: 5px; cursor: pointer; border: none; font-weight: bold; }
+
+/* Hamburger Button */
+.hamburger-btn { display: none; font-size: 28px; color: white; background: none; border: none; cursor: pointer; }
+.mobile-menu { display: none; flex-direction: column; background: #001d45; position: absolute; top: 90px; left: 0; width: 100%; padding: 20px 0; box-shadow: 0 10px 20px rgba(0,0,0,0.5); z-index: 99; text-align: center; gap: 20px; border-top: 1px solid #002f6c;}
+.mobile-menu a { color: white; text-decoration: none; font-weight: bold; font-size: 18px; }
+
+/* HERO */
+.hero { height:500px; background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.6)), url("/hero.jpeg"); background-size:cover; background-position:center; display:flex; justify-content:center; align-items:center; text-align:center; color:white; }
+.hero h1 { font-size:50px; }
+.hero p { margin-top:10px; font-size:20px; }
+.btn { margin-top:20px; padding:12px 25px; background:#FFD700; border-radius:5px; display:inline-block; text-decoration:none; font-weight:bold; color:#002f6c; }
+
+section { padding:60px 8%; }
+.section-title { text-align:center; font-size:36px; color:#002f6c; margin-bottom:40px; }
+.white-text { color: white; }
+
+/* SERVICES */
+#services { background: linear-gradient(rgba(0, 47, 108, 0.8), rgba(0, 47, 108, 0.8)), url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=2074&auto=format&fit=crop'); background-size: cover; background-attachment: fixed; }
+.services { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px; }
+.service-card { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding:30px; border-radius:15px; text-align:center; transition:0.4s; border: 1px solid rgba(255, 255, 255, 0.2); color: white; position:relative; overflow:hidden; }
+.service-card::before { content:""; position:absolute; width:100%; height:5px; background:#FFD700; top:0; left:0; }
+.service-card:hover { transform:translateY(-10px) scale(1.03); box-shadow:0 15px 30px rgba(0,0,0,.4); }
+.service-icon { font-size:40px; margin-bottom:15px; }
+
+/* GLOBE SECTION */
+#globe-section { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://upload.wikimedia.org/wikipedia/commons/8/80/World_map_-_low_resolution.svg'); background-size: cover; background-position: center; display: flex; flex-direction: column; align-items: center; padding: 40px 0 60px 0; position: relative; overflow: hidden; }
+.search-box { display: flex; gap: 10px; z-index: 10; margin-bottom: 20px; }
+.search-box input { padding: 12px; width: 350px; border-radius: 5px; border: none; font-size: 16px; outline:none; border:2px solid transparent;}
+.search-box input:focus { border: 2px solid #FFD700; }
+.search-box button { padding: 12px 25px; background: #FFD700; color: #002f6c; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.search-box button:hover { background: #fff; }
+#globeViz { width: 100%; height: 650px; cursor: grab; margin-top: -40px; }
+
+/* VISA RESULT CARD */
+.visa-result-container {
+    background: white; width: 90%; max-width: 600px; padding: 30px; border-radius: 15px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3); margin-top: -60px; z-index: 20; position: relative;
+    border-top: 5px solid #002f6c; text-align: left; animation: slideUp 0.5s ease;
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+.visa-result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px;}
+.visa-result-header h3 { color: #002f6c; font-size: 24px; }
+.visa-badge { background: #eef2f9; color: #002f6c; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; border: 1px solid #002f6c; }
+.visa-features { list-style: none; margin-bottom: 20px; }
+.visa-features li { margin-bottom: 10px; color: #444; font-size: 15px; }
+.visa-features li::before { content: "✅"; color: green; margin-right: 10px; }
+.book-btn { width: 100%; padding: 12px; background: #002f6c; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+.book-btn:hover { background: #FFD700; color: #002f6c; }
+
+/* FAQ & RATINGS */
+.faq-container { max-width: 800px; margin: auto; }
+details { background: white; margin-bottom: 15px; padding: 15px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+summary { font-weight: bold; cursor: pointer; color: #002f6c; font-size: 18px; outline: none; }
+details p { margin-top: 10px; color: #555; line-height: 1.6; }
+.reviews-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.review-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); text-align: center; }
+.stars { color: #FFD700; font-size: 20px; margin-bottom: 10px; }
+
+/* MODAL */
+.modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
+.modal-content { background: white; padding: 30px; border-radius: 12px; width: 380px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.close-btn { position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer; color: #333; }
+.modal-content input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; background: #f9f9f9;}
+.modal-content button[type="submit"] { width: 100%; padding: 12px; margin-top: 10px; background: #002f6c; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s;}
+.modal-content button[type="submit"]:hover { background: #FFD700; color: #002f6c; }
+.modal-tabs { display: flex; border-bottom: 2px solid #eee; margin-bottom: 20px; }
+.tab-btn { flex: 1; background: none; border: none; padding: 10px; font-size: 16px; font-weight: bold; color: #999; cursor: pointer; transition: 0.3s; }
+.tab-btn.active { color: #002f6c; border-bottom: 3px solid #FFD700; }
+
+/* CONTACT */
+.contact { background:#002f6c; color:white; text-align:center; }
+.contact-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+.contact-link { background: white; color:#002f6c; text-decoration:none; font-size:16px; font-weight: bold; display: flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.wa-link { background: #25D366; color: white; }
+footer { background:#001d45; color:white; text-align:center; padding:20px; }
+
+/* FLOATING WHATSAPP BUTTON (Tumhara Screenshot Jaisa) */
+.float-wa {
+  position: fixed;
+  width: 60px;
+  height: 60px;
+  bottom: 40px;
+  right: 40px;
+  background-color: #25d366;
+  color: #FFF;
+  border-radius: 50px;
+  text-align: center;
+  font-size: 35px;
+  box-shadow: 0 0 20px rgba(37,211,102, 0.6);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.float-wa:hover { transform: scale(1.1); box-shadow: 0 0 25px rgba(37,211,102, 0.8); }
+
+/* MOBILE RESPONSIVE TWEAKS */
+@media(max-width:768px){ 
+  .desktop-nav { display: none; }
+  .hamburger-btn { display: block; }
+  .search-box { flex-direction: column; width: 90%; } 
+  .search-box input { width: 100%; }
+  .float-wa { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 28px; } 
+}
